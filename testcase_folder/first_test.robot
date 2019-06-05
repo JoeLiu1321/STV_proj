@@ -1,6 +1,8 @@
 *** Setting ***
 Library    AppiumLibrary
 Library    BuiltIn
+Library    Dialogs
+Resource    ./Keywords.txt
 Test Setup    On The Calendar Page
 Test Teardown    Close Application
 # Test Teardown    Run Keywords    Delete Activity    15    TestName
@@ -12,13 +14,9 @@ Create Activity With No Name
     Page Should Contain Element    xpath=//android.widget.TextView[@text='請輸入活動名稱。']
 
 Create Activity With Name
-    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
-    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
-    Input Text After Visible    xpath=//android.widget.EditText[@text='活動名稱']    TestName
-    # Press
-    Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnOk')]
-    ${activityName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'TestName')]
-    Should Be Equal    ${activityName}    TestName
+    Create Activity    TestName
+    ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'TestName')]
+    Should Be Equal    ${actualName}    TestName
     [Teardown]    Run Keywords    Delete Activity    15    TestName
     ...              AND    Close Application
 
@@ -40,7 +38,62 @@ Create Activity click Detail
     [Teardown]    Run Keywords    Delete Activity    15    TestName
     ...              AND    Close Application
 
+Edit Activity
+    Create Activity    TestName
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'TestName')]
+    Click Element After Visible    xpath=//*[contains(@resource-id,'action_edit')]
+    Clear Text    xpath=//*[contains(@resource-id,'txtEventName')]
+    Input Text After Visible    xpath=//*[contains(@resource-id,'txtEventName')]    New Name
+    Input Text After Visible    xpath=//*[contains(@resource-id,'txtDescription')]    New Description
+    Input Text After Visible    xpath=//*[contains(@resource-id,'txtAddress')]    New Address
+    ${expectInfo} =    Create List    New Address    New Description
+    Click Element After Visible    xpath=//*[contains(@resource-id,'action_done')]
+    ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'New Name')]
+    Should Be Equal    ${actualName}    New Name
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'New Name')]
+    ${address} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvAddress')]
+    ${description} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvDescription')]
+    ${actualInfo} =    Create List    ${address}    ${description}
+    Should Be Equal    ${expectInfo}    ${actualInfo}
+    [Teardown]    Run Keywords    Click Element After Visible    xpath=//android.widget.ImageButton[contains(@content-desc,'向上瀏覽')]
+    ...              AND    Delete Activity    15    New Name
+    ...              AND    Close Application
+
+Edit Activity time
+    ${activityName} =    Set Variable    TestName
+    Create Activity    ${activityName}
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${activityName}')]
+    Click Element After Visible    xpath=//*[contains(@resource-id,'action_edit')]
+    Click Element After Visible    xpath=//*[contains(@resource-id,'tvToDate')]
+    Click Element After Visible    xpath=//*[@text='25']
+    Click Element After Visible    xpath=//*[@text='確定']
+    ${start} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvFromDate')]
+    ${end} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvToDate')]
+    ${expectResult} =    Create List    ${start}    ${end}
+    Click Element After Visible    xpath=//*[contains(@resource-id,'action_done')]
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${activityName}')]
+    ${actualResult} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvSummary1')]
+    :FOR    ${index}    IN    @{expectResult}
+    \    Should Contain    ${actualResult}    ${index}
+
+    [Teardown]    Run Keywords    Click Element After Visible    xpath=//android.widget.ImageButton[contains(@content-desc,'向上瀏覽')]
+    ...              AND    Delete Activity    15    ${activityName}
+    ...              AND    Close Application
 *** Keywords ***
+Create Activity
+    [Arguments]    ${activityName}
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
+    Input Text After Visible    xpath=//android.widget.EditText[@text='活動名稱']       ${activityName}
+    # Press
+    Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnOk')]
+    ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'${activityName}')]
+    Should Be Equal    ${actualName}    ${activityName}
+
 Delete Activity
     [Arguments]    ${date}    ${name}
     Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
@@ -49,26 +102,3 @@ Delete Activity
     Click Element After Visible    xpath=//android.widget.Button[@text='確定']
     Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
     Page Should Not Contain Element    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${name}')]
-
-On The Calendar Page
-    log    ${CURDIR}${/}ContactManager.apk
-    Open Application    http://localhost:4723/wd/hub    platformName=Android    platformVersion=9    deviceName=UBV7N18405000195
-    ...    appPackage=info.kfsoft.calendar    appActivity=MainActivity    noReset=true
-
-Click Element After Visible
-    [Arguments]    ${locator}
-    Wait Until Page Contains Element    ${locator}    timeout=3
-    Wait Until Element Is Visible    ${locator}    timeout=3
-    Click Element    ${locator}
-
-Input Text After Visible
-    [Arguments]    ${locator}    ${text}
-    Wait Until Page Contains Element    ${locator}    timeout=3
-    Wait Until Element Is Visible    ${locator}    timeout=3
-    Input Text    ${locator}    ${text}
-
-Get Text After Visible
-    [Arguments]    ${locator}
-    Wait Until Element Is Visible    ${locator}    timeout=3
-    ${activityName} =    Get Text    ${locator}
-    [Return]    ${activityName}

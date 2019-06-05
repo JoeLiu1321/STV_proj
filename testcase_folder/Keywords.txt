@@ -1,0 +1,27 @@
+*** Setting ***
+Library    AppiumLibrary
+Library    BuiltIn
+
+*** Keywords ***
+On The Calendar Page
+    log    ${CURDIR}${/}ContactManager.apk
+    Open Application    http://localhost:4723/wd/hub    platformName=Android    platformVersion=9    deviceName=UBV7N18405000195
+    ...    appPackage=info.kfsoft.calendar    appActivity=MainActivity    noReset=true
+
+Click Element After Visible
+    [Arguments]    ${locator}
+    Wait Until Page Contains Element    ${locator}    timeout=3
+    Wait Until Element Is Visible    ${locator}    timeout=3
+    Click Element    ${locator}
+
+Input Text After Visible
+    [Arguments]    ${locator}    ${text}
+    Wait Until Page Contains Element    ${locator}    timeout=3
+    Wait Until Element Is Visible    ${locator}    timeout=3
+    Input Text    ${locator}    ${text}
+
+Get Text After Visible
+    [Arguments]    ${locator}
+    Wait Until Element Is Visible    ${locator}    timeout=3
+    ${activityName} =    Get Text    ${locator}
+    [Return]    ${activityName}
