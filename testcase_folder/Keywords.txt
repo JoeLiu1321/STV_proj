@@ -25,3 +25,16 @@ Get Text After Visible
     Wait Until Element Is Visible    ${locator}    timeout=3
     ${activityName} =    Get Text    ${locator}
     [Return]    ${activityName}
+
+Change Mode
+    [Arguments]    ${mode}
+    Click Element After Visible    xpath=//android.widget.Spinner
+    Click Element After Visible    xpath=//android.widget.TextView[@text='${mode}']
+
+Select Month
+    [Arguments]    ${month}
+    Click Element After Visible    xpath=(//*[contains(@resource-id,'gridview')])[${month}]
+
+Select Day
+    [Arguments]    ${day}
+    Click Element After Visible    xpath=//android.widget.TextView[@text='${day}']

@@ -9,8 +9,7 @@ Test Teardown    Close Application
 
 *** Test Cases ***
 Test Month Mode
-    Click Element After Visible    xpath=//android.widget.Spinner
-    Click Element After Visible    xpath=//android.widget.TextView[@text='月']
+    Change Mode    月
     ${tm}       Get Current Date
     ${expectMonth} =    Evaluate    re.split('-','${tm}')    re
     ${expectMonth} =    Evaluate    str(int('${expectMonth[1]}')) + '月'
@@ -18,8 +17,7 @@ Test Month Mode
     Should Be Equal    ${expectMonth}    ${actualMonth}
     
 Test Date Mode
-    Click Element After Visible    xpath=//android.widget.Spinner
-    Click Element After Visible    xpath=//android.widget.TextView[@text='日']
+    Change Mode    日
     ${tm}       Get Current Date
     ${expectMonth} =    Evaluate    re.split('-','${tm}')    re
     ${tempMonth} =    Evaluate    str(int('${expectMonth[1]}')) + '月'
@@ -30,8 +28,7 @@ Test Date Mode
     Should Be Equal    ${expectResult}    ${actualResult}
 
 Test Year Mode
-    Click Element After Visible    xpath=//android.widget.Spinner
-    Click Element After Visible    xpath=//android.widget.TextView[@text='年']
+    Change Mode    年
     ${tm}       Get Current Date
     ${tempYear} =    Evaluate    re.split('-','${tm}')    re
     ${expectYear} =    Evaluate    str(int('${tempYear[0]}')) + '年'
@@ -39,8 +36,7 @@ Test Year Mode
     Should Be Equal    ${expectYear}    ${actualYear}
 
 Test Week Mode
-    Click Element After Visible    xpath=//android.widget.Spinner
-    Click Element After Visible    xpath=//android.widget.TextView[@text='週']
+    Change Mode    週
     ${actualResult} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'tvWeekNo')]
     Should Contain    ${actualResult}    第
     Should Contain    ${actualResult}    週
