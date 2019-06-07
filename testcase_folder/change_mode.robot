@@ -8,15 +8,15 @@ Test Setup    On The Calendar Page
 Test Teardown    Close Application
 
 *** Test Cases ***
-Test Month Mode
+TC-06 Test Month Mode
     Change Mode    月
     ${tm}       Get Current Date
     ${expectMonth} =    Evaluate    re.split('-','${tm}')    re
     ${expectMonth} =    Evaluate    str(int('${expectMonth[1]}')) + '月'
     ${actualMonth} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'tvTime')]
     Should Be Equal    ${expectMonth}    ${actualMonth}
-    
-Test Date Mode
+
+TC-05 Test Date Mode
     Change Mode    日
     ${tm}       Get Current Date
     ${expectMonth} =    Evaluate    re.split('-','${tm}')    re
@@ -27,7 +27,7 @@ Test Date Mode
     ${actualResult} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'tvTime')]
     Should Be Equal    ${expectResult}    ${actualResult}
 
-Test Year Mode
+TC-07 Test Year Mode
     Change Mode    年
     ${tm}       Get Current Date
     ${tempYear} =    Evaluate    re.split('-','${tm}')    re
@@ -35,7 +35,7 @@ Test Year Mode
     ${actualYear} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'tvYear')]
     Should Be Equal    ${expectYear}    ${actualYear}
 
-Test Week Mode
+TC-08 Test Week Mode
     Change Mode    週
     ${actualResult} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'tvWeekNo')]
     Should Contain    ${actualResult}    第

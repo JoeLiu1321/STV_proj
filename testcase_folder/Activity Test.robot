@@ -7,23 +7,22 @@ Test Setup    On The Calendar Page
 Test Teardown    Close Application
 
 *** Test Cases ***
-Create Activity With No Name
+TC-01 Create Activity With No Name
     Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
     Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnOk')]
     Page Should Contain Element    xpath=//android.widget.TextView[@text='請輸入活動名稱。']
 
-Create Activity With Name
+TC-01 Create Activity With Name
     Create Activity    TestName
     ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'TestName')]
     Should Be Equal    ${actualName}    TestName
     [Teardown]    Run Keywords    Delete Activity    15    TestName
     ...              AND    Close Application
 
-Create Activity click Detail
+TC-02 Create Activity Click Detail
     Click Element After Visible    xpath=//android.widget.TextView[@text='15']
     Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
     Input Text After Visible    xpath=//android.widget.EditText[@text='活動名稱']    TestName
-    # Press
     Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnMore')]
     Input Text After Visible    xpath=//android.widget.EditText[contains(@resource-id,'txtDescription')]    TestDescription
     Click Element After Visible    xpath=//android.widget.LinearLayout[contains(@resource-id,'action_done')]
@@ -37,7 +36,7 @@ Create Activity click Detail
     [Teardown]    Run Keywords    Delete Activity    15    TestName
     ...              AND    Close Application
 
-Edit Activity
+TC-15 Edit Activity
     Create Activity    TestName
     Click Element After Visible    xpath=//android.widget.TextView[@text='15']
     Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'TestName')]
@@ -60,7 +59,7 @@ Edit Activity
     ...              AND    Delete Activity    15    New Name
     ...              AND    Close Application
 
-Edit Activity Time Range
+TC-03 Edit Activity Time Range
     ${activityName} =    Set Variable    TestName
     ${day} =    Set Variable    15
     Create Activity    ${activityName}
@@ -84,7 +83,7 @@ Edit Activity Time Range
     ...              AND    Delete Activity    15    ${activityName}
     ...              AND    Close Application
 
-TC-4 Select Activity
+TC-04 Select Activity
     ${activityName} =    Set Variable    TestName
     ${day} =    Set Variable    15
     Create Activity    ${activityName}
@@ -96,7 +95,7 @@ TC-4 Select Activity
     ...              AND    Delete Activity    ${day}    ${activityName}
     ...              AND    Close Application
 
-TC-9 Select Day
+TC-09 Select Day
     ${day} =    Set Variable    15
     Change Mode    月
     Select Day    ${day}
@@ -122,22 +121,3 @@ TC-11 Change To Month Mode In Year Mode
 Enter Activity
     [Arguments]    ${activityName}
     Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${activityName}')]
-
-Create Activity
-    [Arguments]    ${activityName}
-    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
-    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
-    Input Text After Visible    xpath=//android.widget.EditText[@text='活動名稱']       ${activityName}
-    # Press
-    Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnOk')]
-    ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'${activityName}')]
-    Should Be Equal    ${actualName}    ${activityName}
-
-Delete Activity
-    [Arguments]    ${date}    ${name}
-    Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
-    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${name}')]
-    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_remove')]
-    Click Element After Visible    xpath=//android.widget.Button[@text='確定']
-    Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
-    Page Should Not Contain Element    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${name}')]

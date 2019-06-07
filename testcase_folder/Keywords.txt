@@ -38,3 +38,26 @@ Select Month
 Select Day
     [Arguments]    ${day}
     Click Element After Visible    xpath=//android.widget.TextView[@text='${day}']
+
+Enter More Options
+    [Arguments]    ${option}
+    Click Element After Visible    xpath=//android.widget.ImageView[@content-desc='更多選項']
+    Click Element After Visible    xpath=//android.widget.TextView[@text='${option}']
+
+Delete Activity
+    [Arguments]    ${date}    ${name}
+    Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${name}')]
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_remove')]
+    Click Element After Visible    xpath=//android.widget.Button[@text='確定']
+    Click Element After Visible    xpath=//android.widget.TextView[@text='${date}']
+    Page Should Not Contain Element    xpath=//android.widget.TextView[contains(@resource-id,'txtContent') and contains(@text,'${name}')]
+
+Create Activity
+    [Arguments]    ${activityName}
+    Click Element After Visible    xpath=//android.widget.TextView[@text='15']
+    Click Element After Visible    xpath=//android.widget.TextView[contains(@resource-id,'action_add')]
+    Input Text After Visible    xpath=//android.widget.EditText[@text='活動名稱']       ${activityName}
+    Click Element After Visible    xpath=//android.widget.Button[contains(@resource-id,'btnOk')]
+    ${actualName} =    Get Text After Visible    xpath=//android.widget.TextView[@text='15']/..//*[contains(@text,'${activityName}')]
+    Should Be Equal    ${actualName}    ${activityName}

@@ -8,7 +8,7 @@ Resource    ./Keywords.txt
 Test Setup    On The Calendar Page
 Test Teardown    Close Application
 *** Test Cases ***
-Test Back To Current Date In Year Mode
+TC-12 Test Back To Current Date In Year Mode
     Click Element After Visible    xpath=//android.widget.Spinner
     Click Element After Visible    xpath=//android.widget.TextView[@text='年']
     Swipe Left
@@ -18,7 +18,7 @@ Test Back To Current Date In Year Mode
     ${actualYear} =    Get Text After Visible    xpath=//*[contains(@resource-id,'tvYear')]
     Should Be Equal    ${expecYear[0]}年      ${actualYear}
 
-Test Back To Current Date In Week Mode
+TC-12 Test Back To Current Date In Week Mode
     Click Element After Visible    xpath=//android.widget.Spinner
     Click Element After Visible    xpath=//android.widget.TextView[@text='週']
     ${expectTodayInfo} =    Get Today Info In Week Mode
@@ -27,7 +27,7 @@ Test Back To Current Date In Week Mode
     ${actualTodayInfo} =    Get Today Info In Week Mode
     Should Be Equal    ${expectTodayInfo}    ${actualTodayInfo}
 
-Test Back To Current Date In Day Mode
+TC-12 Test Back To Current Date In Day Mode
     Click Element After Visible    xpath=//android.widget.Spinner
     Click Element After Visible    xpath=//android.widget.TextView[@text='日']
     ${expectTodayInfo} =    Get Today Info In Day And Month Mode
@@ -36,7 +36,7 @@ Test Back To Current Date In Day Mode
     ${actualTodayInfo} =    Get Today Info In Day And Month Mode
     Should Be Equal    ${expectTodayInfo}    ${actualTodayInfo}
 
-Test Back To Current Date In Month Mode
+TC-13 Test Back To Current Date In Month Mode
     Click Element After Visible    xpath=//android.widget.Spinner
     Click Element After Visible    xpath=//android.widget.TextView[@text='月']
     ${expectTodayInfo} =    Get Today Info In Day And Month Mode

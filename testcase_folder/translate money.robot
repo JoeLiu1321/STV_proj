@@ -10,7 +10,7 @@ Test Teardown    Close Application
 @{Number} =    壹    貳    叁    肆    伍    陸    柒    捌    玖
 
 *** Test Cases ***
-Test Decimal Boundary
+TC-21 Test Decimal Boundary
     Enter More Options    設置
     Click Element After Visible    xpath=//android.widget.TextView[@text='支票銀碼轉換']
     Click Element After Visible    xpath=//android.widget.Button[@text='確定']
@@ -22,7 +22,7 @@ Test Decimal Boundary
     ${after} =    Get Text After Visible    xpath=//android.widget.TextView[contains(@resource-id,'txtNumber')]
     Should Be Equal    ${before}    ${after}
 
-Test Decimal Value
+TC-21 Test Decimal Value
     Enter More Options    設置
     Click Element After Visible    xpath=//android.widget.TextView[@text='支票銀碼轉換']
     Click Element After Visible    xpath=//android.widget.Button[@text='確定']
@@ -39,7 +39,7 @@ Test Decimal Value
     ${expectSecond} =    Evaluate    re.split('分','${expectFirst[1]}')    re
     Should Be Equal    ${expectSecond[0]}    ${actualSecond}
 
-Test Uper Bound
+TC-21 Test Uper Bound
     Enter More Options    設置
     Click Element After Visible    xpath=//android.widget.TextView[@text='支票銀碼轉換']
     Click Element After Visible    xpath=//android.widget.Button[@text='確定']
@@ -73,8 +73,3 @@ Get Number From List
     [Arguments]    ${input}
     ${index} =    Evaluate    ${input}-1
     [Return]    ${Number[${index}]}
-
-Enter More Options
-    [Arguments]    ${option}
-    Click Element After Visible    xpath=//android.widget.ImageView[@content-desc='更多選項']
-    Click Element After Visible    xpath=//android.widget.TextView[@text='${option}']
